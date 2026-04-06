@@ -293,12 +293,12 @@ const Hero = () => {
       </div>
 
       {/* CSS for progress animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes progress {
           from { width: 0%; }
           to { width: 100%; }
         }
-        
+
         @keyframes fade-up {
           from {
             opacity: 0;
@@ -309,7 +309,7 @@ const Hero = () => {
             transform: translateY(0);
           }
         }
-        
+
         .animate-fade-up {
           animation: fade-up 0.6s ease-out forwards;
           opacity: 0;
