@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/categories";
+import ProductCard from "@/components/products/ProductCard";
 import { ArrowLeft, MessageCircle, ChevronRight } from "lucide-react";
 
 const CategoryDetail = () => {
@@ -50,15 +51,16 @@ const CategoryDetail = () => {
       <section className="py-12 lg:py-16 bg-warm-gradient">
         <div className="container-custom">
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center text-5xl">
+            <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center text-5xl shrink-0">
               {category.icon}
             </div>
             <div>
               <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 {category.name}
               </h1>
-              <p className="text-lg text-muted-foreground">
-                {category.description}
+              <p className="text-lg text-muted-foreground">{category.description}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {category.products.length} product{category.products.length !== 1 ? "s" : ""} available
               </p>
             </div>
           </div>
@@ -70,45 +72,37 @@ const CategoryDetail = () => {
         <div className="container-custom">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-display text-xl font-semibold text-foreground">
-              Available Products ({category.products.length})
+              Available Products
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {category.products.map((product, index) => (
-              <div
-                key={product}
-                className="group p-6 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-card transition-all duration-300 animate-fade-up"
-                style={{ animationDelay: `${index * 0.03}s` }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                    {category.icon}
-                  </div>
-                  <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
-                    {product}
-                  </h3>
-                </div>
-              </div>
+              <ProductCard
+                key={product.id}
+                product={product}
+                categoryName={category.name}
+                index={index}
+              />
             ))}
           </div>
 
           {/* CTA */}
-          <div className="mt-12 p-8 rounded-2xl bg-secondary border border-border text-center">
+          <div className="mt-14 p-8 rounded-2xl bg-secondary border border-border text-center">
             <h3 className="font-display text-xl font-semibold text-foreground mb-2">
-              Interested in {category.name}?
+              Need a bulk order or custom pack?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Contact us on WhatsApp to place your order or inquire about availability.
+              Contact us on WhatsApp for bulk pricing, custom orders, or to check availability on any item.
             </p>
             <Button asChild variant="whatsapp" size="lg">
               <a
-                href={`https://wa.me/2347030943463?text=Hello, I'm interested in ordering from your ${category.name} category.`}
+                href={`https://wa.me/2347030943463?text=Hello! I'm interested in bulk orders from your ${category.name} category. Please share pricing details.`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <MessageCircle className="w-5 h-5" />
-                Order on WhatsApp
+                Chat With Us on WhatsApp
               </a>
             </Button>
           </div>
