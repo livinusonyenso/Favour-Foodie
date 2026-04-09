@@ -1,21 +1,34 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { categories } from "@/data/categories";
+import { useFoodie } from "@/context/FoodieContext";
 import ProductCard from "@/components/products/ProductCard";
 import { ArrowLeft, MessageCircle, ChevronRight } from "lucide-react";
 
 const CategoryDetail = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const category = categories.find((c) => c.id === categoryId);
+  const { getCategoryById, isLoading, error } = useFoodie();
+  const category = getCategoryById(categoryId ?? "");
 
-  if (!category) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="container-custom py-20 text-center">
-          <h1 className="font-display text-2xl font-bold mb-4">Category Not Found</h1>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !category) {
+    return (
+      <Layout>
+        <div className="container-custom py-20 text-center">
+          <h1 className="font-display text-2xl font-bold mb-4">
+            {error ? "Something went wrong" : "Category Not Found"}
+          </h1>
           <p className="text-muted-foreground mb-8">
-            The category you're looking for doesn't exist.
+            {error ?? "The category you're looking for doesn't exist."}
           </p>
           <Button asChild>
             <Link to="/categories">

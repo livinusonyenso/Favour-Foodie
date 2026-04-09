@@ -15,7 +15,10 @@ export interface Category {
   products: Product[];
 }
 
-export const categories: Category[] = [
+// Data is served from the backend API via FoodieContext.
+// Use useFoodie() to access categories in components.
+
+const _categories: Category[] = [
   {
     id: "seafoods",
     name: "Seafoods",
@@ -673,3 +676,5 @@ export const categories: Category[] = [
      ],
   },
 ];
+
+export { _categories as _categoriesSeedData };

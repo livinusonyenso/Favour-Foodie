@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { categories } from "@/data/categories";
+import { useFoodie } from "@/context/FoodieContext";
 import CategoryCard from "./CategoryCard";
 
 const CategoriesGrid = () => {
+  const { categories, isLoading } = useFoodie();
+
   return (
     <section className="py-20 lg:py-28 bg-warm-gradient">
       <div className="container-custom">
@@ -22,11 +24,15 @@ const CategoriesGrid = () => {
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {categories.map((category, index) => (
-            <CategoryCard key={category.id} category={category} index={index} />
-          ))}
-        </div>
+        {isLoading ? (
+          <p className="text-center text-muted-foreground py-8">Loading categories...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {categories.map((category, index) => (
+              <CategoryCard key={category.id} category={category} index={index} />
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
         <div className="text-center mt-12">

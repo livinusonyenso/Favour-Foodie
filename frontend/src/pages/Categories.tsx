@@ -1,8 +1,10 @@
 import Layout from "@/components/layout/Layout";
 import CategoryCard from "@/components/home/CategoryCard";
-import { categories } from "@/data/categories";
+import { useFoodie } from "@/context/FoodieContext";
 
 const Categories = () => {
+  const { categories, isLoading, error } = useFoodie();
+
   return (
     <Layout>
       {/* Page Header */}
@@ -22,11 +24,19 @@ const Categories = () => {
       {/* Categories Grid */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container-custom">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {categories.map((category, index) => (
-              <CategoryCard key={category.id} category={category} index={index} />
-            ))}
-          </div>
+          {isLoading && (
+            <p className="text-center text-muted-foreground py-12">Loading categories...</p>
+          )}
+          {error && (
+            <p className="text-center text-destructive py-12">{error}</p>
+          )}
+          {!isLoading && !error && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {categories.map((category, index) => (
+                <CategoryCard key={category.id} category={category} index={index} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </Layout>

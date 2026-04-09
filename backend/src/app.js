@@ -3,13 +3,19 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const productRoutes = require("./routes/productRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +31,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/products", productRoutes);
+app.use("/categories", categoryRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);
