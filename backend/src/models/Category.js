@@ -51,6 +51,30 @@ class Category {
   }
 
   /**
+   * Update name, description, or icon of a category by its slug id.
+   * Products list is never modified through this method.
+   * @param {string} id
+   * @param {{ name?: string, description?: string, icon?: string }} data
+   * @returns {object|null} updated category or null if not found
+   */
+  static update(id, data) {
+    const db = readDb();
+    const index = db.categories.findIndex((c) => c.id === id);
+    if (index === -1) return null;
+
+    const existing = db.categories[index];
+    db.categories[index] = {
+      ...existing,
+      name:        data.name        !== undefined ? String(data.name).trim()        : existing.name,
+      description: data.description !== undefined ? String(data.description).trim() : existing.description,
+      icon:        data.icon        !== undefined ? String(data.icon).trim()         : existing.icon,
+    };
+
+    writeDb(db);
+    return db.categories[index];
+  }
+
+  /**
    * Replace all categories (used by the seed script).
    * @param {Array} data
    */

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, ShoppingCart } from "lucide-react";
+import { Menu, X, Phone, ShoppingCart, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -11,6 +11,8 @@ const navigation = [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
+
+const adminNavigation = [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }];
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,6 +46,24 @@ const Navbar = () => {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* Dashboard link (desktop) */}
+            <div className="hidden lg:flex lg:items-center lg:gap-1 ml-2 pl-4 border-l border-border">
+              {adminNavigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                    location.pathname === item.href
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <item.icon className="w-4 h-4" />
                   {item.name}
                 </Link>
               ))}
@@ -133,6 +153,23 @@ const Navbar = () => {
                     {item.name}
                   </Link>
                 ))}
+                <div className="pt-2 border-t border-border mt-2">
+                  {adminNavigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                        location.pathname === item.href
+                          ? "bg-primary/10 text-primary"
+                          : "text-foreground hover:bg-muted"
+                      }`}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
                 <div className="mt-4 px-4 flex flex-col gap-3">
                   <a
                     href="tel:+2347030943463"

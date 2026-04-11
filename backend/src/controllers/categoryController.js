@@ -36,4 +36,34 @@ const getCategoryById = (req, res, next) => {
   }
 };
 
-module.exports = { getAllCategories, getCategoryById };
+/**
+ * PATCH /categories/:id
+ * Updates name, description, and/or icon of a category.
+ * Products are unchanged.
+ */
+const updateCategory = (req, res, next) => {
+  try {
+    const { name, description, icon } = req.body;
+
+    if (!name && !description && !icon) {
+      return res.status(400).json({
+        success: false,
+        message: "Provide at least one field to update: name, description, or icon.",
+      });
+    }
+
+    const updated = Category.update(req.params.id, { name, description, icon });
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        message: `Category '${req.params.id}' not found.`,
+      });
+    }
+
+    res.json({ success: true, message: "Category updated successfully.", data: updated });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllCategories, getCategoryById, updateCategory };
